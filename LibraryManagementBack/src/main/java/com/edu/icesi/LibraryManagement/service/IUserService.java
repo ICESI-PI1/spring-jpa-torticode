@@ -1,4 +1,4 @@
 package com.edu.icesi.LibraryManagement.service;
 
-public class BookService {
+public interface IUserService {
 }
