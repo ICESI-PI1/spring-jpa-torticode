@@ -17,7 +17,6 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDate publicationDate;
     @ManyToOne
     @JoinColumn(name="author_id")
