@@ -4,12 +4,14 @@ import com.edu.icesi.LibraryManagement.persistence.model.Author;
 import com.edu.icesi.LibraryManagement.persistence.model.Book;
 import com.edu.icesi.LibraryManagement.persistence.repository.IAuthorRepository;
 import com.edu.icesi.LibraryManagement.service.IAuthorService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class AuthorServiceImpl implements IAuthorService {
 
     private IAuthorRepository authorRepository;
@@ -56,8 +58,5 @@ public class AuthorServiceImpl implements IAuthorService {
         }
         return flag;
     }
-    @Override
-    public List<Book> booksByAuthor(Long id) {
-        return authorRepository.findById(id).get().getBooks();
-    }
+
 }
