@@ -26,4 +26,9 @@ public class Book {
         this(book.getId(), book.getTitle(),book.getPublicationDate(),book.getAuthor());
     }
 
+    public Book(String title,LocalDate publicationDate,Author author){
+        this.title=title;
+        this.publicationDate=publicationDate;
+        this.author=author;
+    }
 }
