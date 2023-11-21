@@ -3,6 +3,7 @@ package com.edu.icesi.LibraryManagement.service.impl;
 import com.edu.icesi.LibraryManagement.persistence.model.Author;
 import com.edu.icesi.LibraryManagement.persistence.model.Book;
 import com.edu.icesi.LibraryManagement.persistence.repository.IBookRepository;
+import com.edu.icesi.LibraryManagement.service.AuthorBookDTO;
 import com.edu.icesi.LibraryManagement.service.IBookService;
 import org.springframework.stereotype.Service;
 
@@ -64,8 +65,20 @@ public class BookServiceImpl implements IBookService {
         return null;
     }
     @Override
-    public List<Book> getBooksbyAuthor(Long idAuthor) {
-        return getAllBooks().stream().filter(p -> p.getAuthor().getId().equals(idAuthor)).
-                collect(Collectors.toList());
+    public List<AuthorBookDTO> getBooksbyAuthor(Long idAuthor) {
+        return getAllBooks().stream()
+                .filter(book -> book.getAuthor().getId().equals(idAuthor))
+                .map(book -> {
+                    Author author = book.getAuthor();
+                    AuthorBookDTO dto = new AuthorBookDTO();
+                    dto.setAuthorId(author.getId());
+                    dto.setAuthorName(author.getName());
+                    dto.setAuthorNationality(author.getNationality());
+                    dto.setBookId(book.getId());
+                    dto.setBookTitle(book.getTitle());
+                    dto.setBookPublicationDate(book.getPublicationDate());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }
