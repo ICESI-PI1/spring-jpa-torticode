@@ -8,7 +8,7 @@ import com.edu.icesi.LibraryManagement.persistence.model.User;
 public interface AuthenticationService {
     JwtAuthenticationResponse signup(SignUpRequest request);
 
+
     JwtAuthenticationResponse signin(SignInRequest request);
 
-    User signup(User user);
 }

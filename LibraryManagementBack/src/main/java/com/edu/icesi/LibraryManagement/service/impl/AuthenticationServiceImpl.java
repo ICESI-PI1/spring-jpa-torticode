@@ -1,17 +1,18 @@
 package com.edu.icesi.LibraryManagement.service.impl;
 
+import com.edu.icesi.LibraryManagement.dao.request.SignInRequest;
+import com.edu.icesi.LibraryManagement.dao.request.SignUpRequest;
 import com.edu.icesi.LibraryManagement.dao.response.JwtAuthenticationResponse;
+import com.edu.icesi.LibraryManagement.persistence.model.Rol;
 import com.edu.icesi.LibraryManagement.service.IJwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.edu.icesi.LibraryManagement.persistence.model.Rol;
 import com.edu.icesi.LibraryManagement.persistence.model.User;
 import com.edu.icesi.LibraryManagement.persistence.repository.IUserRepository;
 import com.edu.icesi.LibraryManagement.service.AuthenticationService;
-import com.edu.icesi.LibraryManagement.service.IJwtService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,22 +24,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final IJwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+
+
     @Override
-    public JwtAuthenticationResponse signup(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRol(Rol.USER);
+    public JwtAuthenticationResponse signup(SignUpRequest request) {
+        var user = User.builder()
+                .id(request.getId())
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .rol(Rol.USER)
+                .build();
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 
     @Override
-    public JwtAuthenticationResponse signin(User user) {
+    public JwtAuthenticationResponse signin(SignInRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        var existingUser = userRepository.findByEmail(user.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
-        var jwt = jwtService.generateToken(existingUser);
+                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword())
+        );
+        var user= userRepository.findById(request.getId()
+            ).orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+        var jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 

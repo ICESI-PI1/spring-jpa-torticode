@@ -17,10 +17,8 @@ public class Author {
     private Long id;
     private String name;
     private String nationality;
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Book> books;
 
     public Author(Author author){
-        this(author.getId(),author.getName(),author.getNationality(),author.getBooks());
+        this(author.getId(),author.getName(),author.getNationality());
     }
 }

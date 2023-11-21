@@ -2,6 +2,7 @@ package com.edu.icesi.LibraryManagement.persistence.model;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +17,18 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
-public class User implements UserDetails {
+@Table(name ="Myusers")
+@Builder
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     private Long id;
     private String username;
     private String password;
+    //Agregado de prueba
+    @Enumerated(EnumType.STRING)
     private Rol rol;
 
     public User(User user){
