@@ -20,6 +20,9 @@ import com.edu.icesi.LibraryManagement.service.IUserService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -57,4 +60,6 @@ public class SecurityConfiguration {
             throws Exception {
         return config.getAuthenticationManager();
     }
+
+
 }

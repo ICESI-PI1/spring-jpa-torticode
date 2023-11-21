@@ -14,3 +14,7 @@ INSERT INTO book (title, publication_date, author_id) VALUES ('Metodo de dorfman
 INSERT INTO book (title, publication_date, author_id) VALUES ('Miracolous', '2023-02-02', 5);
 INSERT INTO book (title, publication_date, author_id) VALUES ('Steven Universe', '2023-03-03', 6);
 INSERT INTO book (title, publication_date, author_id) VALUES ('Casos de uso', '2023-04-04', 4);
+
+-- Insert en tabla myusers
+
+INSERT INTO myusers (username, password, rol) VALUES('admin', '$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6', 'ADMIN');

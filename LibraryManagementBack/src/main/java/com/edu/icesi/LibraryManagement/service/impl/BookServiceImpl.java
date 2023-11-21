@@ -5,6 +5,7 @@ import com.edu.icesi.LibraryManagement.persistence.model.Book;
 import com.edu.icesi.LibraryManagement.persistence.repository.IBookRepository;
 import com.edu.icesi.LibraryManagement.service.dto.AuthorBookDTO;
 import com.edu.icesi.LibraryManagement.service.IBookService;
+import com.edu.icesi.LibraryManagement.service.dto.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements IBookService {
 
     private IBookRepository bookRepository;
+    private Mapper mapper;
 
-    public BookServiceImpl(IBookRepository bookRepository){
+    public BookServiceImpl(IBookRepository bookRepository, Mapper mapper){
         this.bookRepository=bookRepository;
-    };
+        this.mapper = mapper;
+    }
     @Override
     public List<Book> getAllBooks() {
         return bookRepository.findAll();

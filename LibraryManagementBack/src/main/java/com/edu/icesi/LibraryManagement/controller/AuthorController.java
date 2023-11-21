@@ -6,23 +6,29 @@ import com.edu.icesi.LibraryManagement.persistence.model.Book;
 import com.edu.icesi.LibraryManagement.service.dto.AuthorBookDTO;
 import com.edu.icesi.LibraryManagement.service.IAuthorService;
 import com.edu.icesi.LibraryManagement.service.IBookService;
+import com.edu.icesi.LibraryManagement.service.dto.AuthorDTO;
+import com.edu.icesi.LibraryManagement.service.dto.Mapper;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5175/")
 @RequestMapping("/autores")
 public class AuthorController {
 
     private final IAuthorService authorService;
     private final IBookService bookService;
 
-    public AuthorController(IAuthorService authorService, IBookService bookService) {
+    private final Mapper mapper;
+
+    public AuthorController(IAuthorService authorService, IBookService bookService, Mapper mapper) {
         this.authorService = authorService;
         this.bookService = bookService;
+        this.mapper = mapper;
 
         /*
         Author author1= new Author(1L,"Carlos","Espanya");
@@ -47,23 +53,35 @@ public class AuthorController {
     }
     @CrossOrigin(origins = "*")
     @GetMapping("")
-    public List<Author> showAllAuthor(){
-        return authorService.getAllAuthors();
+    public List<AuthorDTO> showAllAuthor(){
+        return authorService.getAllAuthors().stream().map(mapper::toDTOauthor)
+                .collect(Collectors.toList());
     }
     @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
-    public Author showAuthor(@PathVariable Long id, Model model){
-        return authorService.findById(id).orElse(null);
+    public AuthorDTO showAuthor(@PathVariable Long id, Model model){
+        Author author = authorService.findById(id).orElse(null);
+        AuthorDTO authorDTO = mapper.toDTOauthor(author);
+        return authorDTO;
     }
     @CrossOrigin(origins = "*")
     @PostMapping("")
-    public Author createAuthor(@RequestBody Author newAuthor){
-        return authorService.saveAuthor(newAuthor);
+    public AuthorDTO createAuthor(@RequestBody AuthorDTO newAuthorDTO){
+        Author newAuthor = mapper.toAuthor(newAuthorDTO);
+        Author savedAuthor = authorService.saveAuthor(newAuthor);
+        AuthorDTO savedAuthorDTO = mapper.toDTOauthor(savedAuthor);
+        return savedAuthorDTO;
     }
 
     @PutMapping("/{id}")
-    public Boolean uploadAuthor(@PathVariable Long id, @RequestBody Author uploadAuthor){
-        return authorService.uploadAuthor(id, uploadAuthor);
+    public Boolean uploadAuthor(@PathVariable Long id, @RequestBody AuthorDTO uploadAuthorDTO){
+        Author existingAuthor = authorService.findById(id).orElse(null);
+        if (existingAuthor != null) {
+            Author updatedAuthor = mapper.toAuthor(uploadAuthorDTO);
+            return authorService.uploadAuthor(id, updatedAuthor);
+        }else{
+            return false;
+        }
     }
     @DeleteMapping("/{id}")
     public Boolean deleteAuthor(@PathVariable Long id){
