@@ -3,6 +3,7 @@ package com.edu.icesi.LibraryManagement.controller;
 
 import com.edu.icesi.LibraryManagement.persistence.model.Author;
 import com.edu.icesi.LibraryManagement.persistence.model.Book;
+import com.edu.icesi.LibraryManagement.service.AuthorBookDTO;
 import com.edu.icesi.LibraryManagement.service.IAuthorService;
 import com.edu.icesi.LibraryManagement.service.IBookService;
 import org.springframework.ui.Model;
@@ -67,7 +68,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{idAuthor}/libros")
-    public List<Book> showBooksByAuthor(@PathVariable Long idAuthor){
+    public List<AuthorBookDTO> showBooksByAuthor(@PathVariable Long idAuthor){
         return bookService.getBooksbyAuthor(idAuthor);
     }
 

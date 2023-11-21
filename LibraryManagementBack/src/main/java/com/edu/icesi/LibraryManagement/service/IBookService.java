@@ -12,5 +12,8 @@ public interface IBookService {
     Book saveBook(Book book);
     Boolean uploadBook(Long id,Book book);
     Boolean deleteBook(Long id);
-    List<Book> getBooksbyAuthor(Long idAuthor);
+    List<AuthorBookDTO> getBooksbyAuthor(Long idAuthor);
+
+
+
 }
