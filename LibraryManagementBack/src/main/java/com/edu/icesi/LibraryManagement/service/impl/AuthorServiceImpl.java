@@ -1,7 +1,6 @@
 package com.edu.icesi.LibraryManagement.service.impl;
 
 import com.edu.icesi.LibraryManagement.persistence.model.Author;
-import com.edu.icesi.LibraryManagement.persistence.model.Book;
 import com.edu.icesi.LibraryManagement.persistence.repository.IAuthorRepository;
 import com.edu.icesi.LibraryManagement.service.IAuthorService;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ public class AuthorServiceImpl implements IAuthorService {
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
     }
+
     @Override
     public Optional<Author> findById(Long id) {
         return authorRepository.findById(id);
@@ -35,15 +35,19 @@ public class AuthorServiceImpl implements IAuthorService {
 
     @Override
     public Boolean uploadAuthor(Long id, Author author) {
-        boolean flag = false;
-        Optional<Author> oldAuthor = findById(id);
-        if(oldAuthor.isPresent()){
-            flag=true;
+
+        Optional<Author> oldAuthorOptional = findById(id);
+        if(oldAuthorOptional.isPresent()){
+            Author oldAuthor = oldAuthorOptional.get();
+            oldAuthor.setName(author.getName());
+            oldAuthor.setNationality(author.getNationality());
             saveAuthor(author);
+            return true;
         }else{
-            throw new NoSuchElementException("No author found with the given ID: " + id);
+            return false;
+
         }
-        return flag;
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.edu.icesi.LibraryManagement.controller;
 
 import com.edu.icesi.LibraryManagement.persistence.model.Book;
-import com.edu.icesi.LibraryManagement.service.AuthorBookDTO;
+import com.edu.icesi.LibraryManagement.service.dto.AuthorBookDTO;
 import com.edu.icesi.LibraryManagement.service.IBookService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,7 @@
 package com.edu.icesi.LibraryManagement.service;
 
 import com.edu.icesi.LibraryManagement.persistence.model.Book;
+import com.edu.icesi.LibraryManagement.service.dto.AuthorBookDTO;
 
 import java.util.List;
 import java.util.Optional;
