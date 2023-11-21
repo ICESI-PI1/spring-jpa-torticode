@@ -19,50 +19,31 @@ import java.util.stream.Collectors;
 public class BookController {
 
     private final IBookService bookService;
-    private final Mapper mapper;
-    public BookController(IBookService bookService, Mapper mapper) {
+    public BookController(IBookService bookService) {
         this.bookService = bookService;
-        this.mapper = mapper;
     }
 
     @GetMapping("")
-    public List<BookDTO> showAllBooks(){
-        return bookService.getAllBooks().stream().map(mapper::toDTObook)
-                .collect(Collectors.toList());
+    public List<Book> showAllBooks(){
+        return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public BookDTO showBook(@PathVariable Long id, Model model){
-        Book book = bookService.findById(id).orElse(null);
-        BookDTO bookDTO = mapper.toDTObook(book);
-        return bookDTO;
+    public Book showBook(@PathVariable Long id, Model model){
+        return bookService.findById(id).orElse(null);
     }
     @PostMapping("")
-    public BookDTO createBook(@RequestBody BookDTO newBookDTO){
-        Book newBook = mapper.toBook(newBookDTO);
-        Book savedBook = bookService.saveBook(newBook);
-        BookDTO savedBookDTO = mapper.toDTObook(savedBook);
-        return savedBookDTO;
+    public Book createAuthor(@RequestBody Book newBook){
+        return bookService.saveBook(newBook);
     }
     @PutMapping("/{id}")
-    public Boolean uploadBook(@PathVariable Long id, @RequestBody BookDTO uploadBookDTO){
-        Book existingBook = bookService.findById(id).orElse(null);
-        if (existingBook != null) {
-            Book updatedBook = mapper.toBook(uploadBookDTO);
-            return bookService.uploadBook(id, updatedBook);
-        }else{
-            return false;
-        }
+    public Boolean uploadBook(@PathVariable Long id, @RequestBody Book uploadBook){
+        return bookService.uploadBook(id,uploadBook);
     }
 
     @DeleteMapping("/{id}")
     public Boolean deleteBook(@PathVariable Long id){
         return bookService.deleteBook(id);
-    }
-
-    @GetMapping("/autor/{idAutor}")
-    public List<AuthorBookDTO> showBooksByAuthor(@PathVariable Long idAutor){
-        return bookService.getBooksbyAuthor(idAutor);
     }
 
 }
