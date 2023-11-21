@@ -35,34 +35,39 @@ public class BookServiceImpl implements IBookService {
         return bookRepository.save(book);
     }
 
-    @Override
     public Boolean uploadBook(Long id, Book book) {
+        Optional<Book> existingBookOptional = findById(id);
 
-        boolean flag = false;
-        Optional<Book> oldBook = findById(id);
-        if(oldBook.isPresent()){
-            saveBook(book);
-            flag=true;
-        }else{
-            throw new NoSuchElementException("No book found with the given ID: " + id);
+        if (existingBookOptional.isPresent()) {
+            Book existingBook = existingBookOptional.get();
+
+            // Actualizar los campos del libro con los valores proporcionados
+            existingBook.setTitle(book.getTitle());
+            existingBook.setPublicationDate(book.getPublicationDate());
+            existingBook.setAuthor(book.getAuthor());
+
+            // Guardar el libro actualizado en la base de datos
+            bookRepository.save(existingBook);
+
+            return true; // Indica que la actualización fue exitosa
+        } else {
+            throw new NoSuchElementException("No se encontró el libro con el ID proporcionado: " + id);
         }
-
-        return flag;
     }
+
 
     @Override
     public Boolean deleteBook(Long id) {
-
-        boolean flag = false;
         Optional<Book> book = findById(id);
-        if(book.isPresent()){
-            flag=true;
+        boolean flag = false;
+
+        if (book.isPresent()) {
             bookRepository.delete(book.get());
-        }else{
+            flag = true;
+        } else {
             throw new NoSuchElementException("No book found with the given ID: " + id);
         }
-
-        return null;
+        return flag;
     }
     @Override
     public List<AuthorBookDTO> getBooksbyAuthor(Long idAuthor) {
